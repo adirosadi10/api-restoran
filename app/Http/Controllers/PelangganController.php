@@ -14,10 +14,11 @@ class PelangganController extends Controller
      */
     public function index()
     {
-        $data = Pelanggan::all();
+        $data = Pelanggan::paginate(10);
         return response()->json($data);
+        
     }
-
+    // simplePaginate(10)
     /**
      * Show the form for creating a new resource.
      *
@@ -32,7 +33,12 @@ class PelangganController extends Controller
             'telp' => 'required|numeric',
         ]);
         $pelanggan = Pelanggan::create($request->all());
-        return response()->json($pelanggan);
+        if($pelanggan){
+            return response()->json([
+                'pesan' => 'Data berhasil disimpan'
+            ]);
+
+        }
     }
 
     /**
@@ -78,8 +84,13 @@ class PelangganController extends Controller
      */
     public function update(Request $request,  $id)
     {
-        Pelanggan::where('idPelanggan', $id)->update($request->all());
-        return response()->json("data telah update");
+        $pelanggan = Pelanggan::where('idPelanggan', $id)->update($request->all());
+        if($pelanggan){
+            return response()->json([
+                'pesan' => "data telah update"
+            ]);
+
+        }
     }
 
     /**
@@ -90,7 +101,11 @@ class PelangganController extends Controller
      */
     public function destroy($id)
     {
-        Pelanggan::where('idPelanggan', $id)->delete();
-        return response()->json('data berhasil dihapus');
+        $pelanggan = Pelanggan::where('idPelanggan', $id)->delete();
+        if($pelanggan){
+            return response()->json([
+                'pesan' => 'data berhasil dihapus'
+            ]);
+        }
     }
 }
